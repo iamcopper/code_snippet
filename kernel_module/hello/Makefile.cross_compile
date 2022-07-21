@@ -9,13 +9,12 @@ ifeq ($(KERNELRELEASE),)
 
 KERNEL_SRC_DIR ?= /home/pan.kang/ftlinux/ftlinux-ft2004/kernel/linux-phytium-4.19.2
 KERNEL_OUT_DIR ?= /home/pan.kang/ftlinux/ftlinux-ft2004/kernel/build
-PWD := $(shell pwd)
 
 modules:
 	$(MAKE) modules \
 		-C $(KERNEL_SRC_DIR) \
 		O=${KERNEL_OUT_DIR} \
-		M=$(PWD) \
+		M=${PWD} \
 		ARCH=${ARCH} \
 		CROSS_COMPILE=${CROSS_COMPILE}
 
@@ -23,7 +22,7 @@ modules_install: modules
 	$(MAKE) modules_install \
 		-C $(KERNEL_SRC_DIR) \
 		O=${KERNEL_OUT_DIR} \
-		M=$(PWD) \
+		M=${PWD} \
 		ARCH=${ARCH} \
 		CROSS_COMPILE=${CROSS_COMPILE}
 
@@ -31,7 +30,7 @@ clean:
 	$(MAKE) clean\
 		-C $(KERNEL_SRC_DIR) \
 		O=${KERNEL_OUT_DIR} \
-		M=$(PWD) \
+		M=${PWD} \
 		ARCH=${ARCH} \
 		CROSS_COMPILE=${CROSS_COMPILE}
 
