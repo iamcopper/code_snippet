@@ -5,6 +5,8 @@
 static int hello_init(void)
 {
 	printk(KERN_ALERT "Hello, world\n");
+	printk(KERN_ALERT "VAR1=%d\n", VAR1);
+	printk(KERN_ALERT "VAR2=%d\n", VAR2);
 	return 0;
 }
 
