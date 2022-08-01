@@ -7,30 +7,38 @@ CROSS_COMPILE := aarch64-linux-gnu-
 
 ifeq ($(KERNELRELEASE),)
 
-KERNEL_SRC_DIR ?= /home/pan.kang/ftlinux/ftlinux-ft2004/kernel/linux-phytium-4.19.2
-KERNEL_OUT_DIR ?= /home/pan.kang/ftlinux/ftlinux-ft2004/kernel/build
+# Build for Phytium
+KERNEL_SRC_PHYTIUM ?= /home/pan.kang/ftlinux/ftlinux-ft2004/kernel/linux-phytium-4.19.2
+KERNEL_OUT_PHYTIUM ?= /home/pan.kang/ftlinux/ftlinux-ft2004/kernel/build
+
+# Build for NVIDIA Jetson
+KERNEL_SRC_JETSON ?= /home/rk/nvidia/source_code/l4t_32.7.1/Linux_for_Tegra/kernel_src/kernel/kernel-4.9
+KERNEL_OUT_JETSON ?= /home/rk/nvidia/source_code/l4t_32.7.1/output
+
 PWD := $(shell pwd)
+KERNEL_SRC ?= ${KERNEL_SRC_JETSON}
+KERNEL_OUT ?= ${KERNEL_OUT_JETSON}
 
 modules:
 	$(MAKE) modules \
-		-C $(KERNEL_SRC_DIR) \
-		O=${KERNEL_OUT_DIR} \
+		-C $(KERNEL_SRC) \
+		O=${KERNEL_OUT} \
 		M=$(PWD) \
 		ARCH=${ARCH} \
 		CROSS_COMPILE=${CROSS_COMPILE}
 
 modules_install: modules
 	$(MAKE) modules_install \
-		-C $(KERNEL_SRC_DIR) \
-		O=${KERNEL_OUT_DIR} \
+		-C $(KERNEL_SRC) \
+		O=${KERNEL_OUT} \
 		M=$(PWD) \
 		ARCH=${ARCH} \
 		CROSS_COMPILE=${CROSS_COMPILE}
 
 clean:
 	$(MAKE) clean\
-		-C $(KERNEL_SRC_DIR) \
-		O=${KERNEL_OUT_DIR} \
+		-C $(KERNEL_SRC) \
+		O=${KERNEL_OUT} \
 		M=$(PWD) \
 		ARCH=${ARCH} \
 		CROSS_COMPILE=${CROSS_COMPILE}
