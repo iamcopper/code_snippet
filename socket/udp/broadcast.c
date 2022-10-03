@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
 	struct sockaddr_in servaddr;
 	servaddr.sin_family = AF_INET;
 	servaddr.sin_port = htons(PORT);
-	servaddr.sin_addr.s_addr = inet_addr(BROADCAST_HOST);
+	servaddr.sin_addr.s_addr = inet_addr(IP_BROADCAST);
 
 	ret = connect(sockfd, (struct sockaddr *)&servaddr, sizeof(struct sockaddr));
 	if (ret < 0) {
