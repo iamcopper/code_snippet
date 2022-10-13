@@ -7,7 +7,8 @@ EXTRA_CFLAGS += -DVAR2=121
 ifeq ($(KERNELRELEASE),)
 
 PWD := $(shell pwd)
-KERNEL_SRC := /lib/modules/$(shell uname -r)/build
+KERNEL_SRC      := /lib/modules/$(shell uname -r)/build
+MOD_INSTALL_DIR :=
 
 modules:
 	$(MAKE) $@ \
@@ -19,12 +20,15 @@ modules_install: modules
 		-C $(KERNEL_SRC) \
 		M=$(PWD)
 
+install: modules
+	# custom install command, intall to MOD_INSTALL_DIR
+
 clean:
 	$(MAKE) $@ \
 		-C $(KERNEL_SRC) \
 		M=$(PWD)
 
-.PHONY: modules modules_install clean
+.PHONY: modules modules_install install clean
 
 else
 

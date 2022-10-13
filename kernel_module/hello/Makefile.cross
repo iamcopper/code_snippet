@@ -12,6 +12,7 @@ PWD := $(shell pwd)
 # Build for Phytium
 KERNEL_SRC_PHYTIUM := /home/pan.kang/ftlinux/ftlinux-ft2004/kernel/linux-phytium-4.19.2
 KERNEL_OUT_PHYTIUM := /home/pan.kang/ftlinux/ftlinux-ft2004/kernel/output
+#KERNEL_OUT_PHYTIUM := ../output
 
 # Build for NVIDIA Jetson
 KERNEL_SRC_JETSON := /home/rk/nvidia/source_code/l4t_32.7.1/Linux_for_Tegra/kernel_src/kernel/kernel-4.9
@@ -19,6 +20,7 @@ KERNEL_OUT_JETSON := /home/rk/nvidia/source_code/l4t_32.7.1/output
 
 KERNEL_SRC := $(KERNEL_SRC_PHYTIUM)
 KERNEL_OUT := $(KERNEL_OUT_PHYTIUM)
+MOD_INSTALL_DIR :=
 
 modules:
 	$(MAKE) $@ \
@@ -36,6 +38,9 @@ modules_install: modules
 		ARCH=$(ARCH) \
 		CROSS_COMPILE=$(CROSS_COMPILE)
 
+install: modules
+	# custom install command, intall to MOD_INSTALL_DIR
+
 clean:
 	$(MAKE) $@ \
 		-C $(KERNEL_SRC) \
@@ -44,7 +49,7 @@ clean:
 		ARCH=$(ARCH) \
 		CROSS_COMPILE=$(CROSS_COMPILE)
 
-.PHONY: modules modules_install clean
+.PHONY: modules modules_install install clean
 
 else
 
