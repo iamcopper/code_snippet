@@ -4,26 +4,32 @@
 
 ifeq ($(KERNELRELEASE),)
 
-KERNELDIR ?= /lib/modules/$(shell uname -r)/build
 PWD := $(shell pwd)
+KERNEL_SRC := /lib/modules/$(shell uname -r)/build
 
 modules:
-	$(MAKE) -C $(KERNELDIR) M=$(PWD) modules
+	$(MAKE) $@ \
+		-C $(KERNEL_SRC) \
+		M=$(PWD)
 
-modules_install:
-	$(MAKE) -C $(KERNELDIR) M=$(PWD) modules_install
+modules_install: modules
+	$(MAKE) $@ \
+		-C $(KERNEL_SRC) \
+		M=$(PWD)
 
 clean:
-	$(MAKE) -C $(KERNELDIR) M=$(PWD) clean
+	$(MAKE) $@ \
+		-C $(KERNEL_SRC) \
+		M=$(PWD)
 
 .PHONY: modules modules_install clean
 
 else
 
+# Final module name: regrw.ko
+obj-m := regrw.o
+
 regrw-y += regrw1.o
 regrw-y += regrw2.o
-
-# The final module name is regrw.ko
-obj-m := regrw.o
 
 endif

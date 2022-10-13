@@ -1,11 +1,12 @@
 #$(warning KERNELRELEASE=$(KERNELRELEASE))
 
-#EXTRA_CFLAGS = -g -O0
+EXTRA_CFLAGS = -g -O0
+EXTRA_CFLAGS += -DVAR1=95
+EXTRA_CFLAGS += -DVAR2=121
 
 ifeq ($(KERNELRELEASE),)
 
 PWD := $(shell pwd)
-
 KERNEL_SRC := /lib/modules/$(shell uname -r)/build
 
 modules:
@@ -27,6 +28,6 @@ clean:
 
 else
 
-obj-m := char_drv.o
+obj-m := hello.o
 
 endif
