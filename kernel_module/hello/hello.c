@@ -4,15 +4,15 @@
 
 static int hello_init(void)
 {
-	printk(KERN_ALERT "Hello, world\n");
-	printk(KERN_ALERT "VAR1=%d\n", VAR1);
-	printk(KERN_ALERT "VAR2=%d\n", VAR2);
+	printk(KERN_ALERT "Hello world\n");
+//	printk(KERN_ALERT "VAR1=%d\n", VAR1);
+//	printk(KERN_ALERT "VAR2=%d\n", VAR2);
 	return 0;
 }
 
 static void hello_exit(void)
 {
-	printk(KERN_ALERT "Goodbye, cruel world\n");
+	printk(KERN_ALERT "Goodbye world\n");
 }
 
 module_init(hello_init);
