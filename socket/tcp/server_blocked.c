@@ -71,6 +71,14 @@ int main(int argc, char *argv[])
 			continue;
 		}
 
+		/* Detail: man 7 socket */
+		/* Set clientfd SEND/RECV timeout */
+		struct timeval tv;
+		tv.tv_sec = 10;
+		tv.tv_usec = 0;
+		setsockopt(clientfd, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof tv);
+		setsockopt(clientfd, SOL_SOCKET, SO_SNDTIMEO, (const char*)&tv, sizeof tv);
+
 		memset(clientaddr_str, 0, sizeof(clientaddr_str));
 		strncpy(clientaddr_str, inet_ntoa(clientaddr.sin_addr), sizeof(clientaddr_str));
 		clientport = ntohs(clientaddr.sin_port);

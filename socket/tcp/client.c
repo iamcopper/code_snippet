@@ -34,6 +34,14 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 
+	/* Detail: man 7 socket */
+	/* Set clientfd SEND/RECV timeout */
+	struct timeval tv;
+	tv.tv_sec = 5;
+	tv.tv_usec = 0;
+	setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof tv);
+	setsockopt(sockfd, SOL_SOCKET, SO_SNDTIMEO, (const char*)&tv, sizeof tv);
+
 	char send_buf[BUF_SIZE] = {0};
 	char recv_buf[BUF_SIZE] = {0};
 
