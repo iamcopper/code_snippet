@@ -1,8 +1,8 @@
-#CROSS = arm-unknown-linux-uclibcgnueabi-
-CC = gcc
-ODIR = .build
+CROSS_COMPILE ?=
+CC := gcc
+ODIR := .build
 
-CFLAGS = -Wall \
+CFLAGS := -Wall \
 		 -Werror
 
 EXTRAINCDIRS +=
@@ -10,7 +10,7 @@ EXTRAINCDIRS +=
 CFLAGS += $(patsubst %,-I %,$(EXTRAINCDIRS))
 CFLAGS += -MD -MP -MF .dep/$(@F).d
 
-LFLAGS = -lcrypto
+LFLAGS := -lcrypto
 
 encrypt_decrypt-obj += encrypt_decrypt.o
 encrypt-obj += encrypt.o
@@ -21,18 +21,18 @@ TARGET := encrypt_decrypt encrypt decrypt
 all: $(TARGET)
 
 encrypt_decrypt: $(addprefix $(ODIR)/,$(encrypt_decrypt-obj))
-	$(CROSS)$(CC) $(CFLAGS) -o $@ $^ $(LFLAGS)
+	$(CROSS_COMPILE)$(CC) $(CFLAGS) -o $@ $^ $(LFLAGS)
 
 encrypt: $(addprefix $(ODIR)/,$(encrypt-obj))
-	$(CROSS)$(CC) $(CFLAGS) -o $@ $^ $(LFLAGS)
+	$(CROSS_COMPILE)$(CC) $(CFLAGS) -o $@ $^ $(LFLAGS)
 
 decrypt: $(addprefix $(ODIR)/,$(decrypt-obj))
-	$(CROSS)$(CC) $(CFLAGS) -o $@ $^ $(LFLAGS)
+	$(CROSS_COMPILE)$(CC) $(CFLAGS) -o $@ $^ $(LFLAGS)
 
 $(ODIR)/%.o: %.c
 	@mkdir -p $(@D)
 	@echo ">>> $<"
-	$(CROSS)$(CC) $(CFLAGS) -c $< -o $@
+	$(CROSS_COMPILE)$(CC) $(CFLAGS) -c $< -o $@
 
 include $(shell mkdir .dep 2>/dev/null) $(wildcard .dep/*)
 

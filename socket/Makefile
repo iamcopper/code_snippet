@@ -1,8 +1,8 @@
-#CROSS = arm-linux-gnueabihf-
-CC = gcc
-ODIR = .build
+CROSS_COMPILE ?=
+CC := gcc
+ODIR := .build
 
-CFLAGS = -Wall \
+CFLAGS := -Wall \
 		 -Werror
 
 EXTRAINCDIRS +=
@@ -10,7 +10,7 @@ EXTRAINCDIRS +=
 CFLAGS += $(patsubst %,-I %,$(EXTRAINCDIRS))
 CFLAGS += -MD -MP -MF .dep/$(@F).d
 
-LFLAGS =
+LFLAGS :=
 
 udp_server-obj += udp/server.o
 udp_client-obj += udp/client.o
@@ -30,28 +30,28 @@ raw: $(RAWOUT)
 
 udp/server: $(addprefix $(ODIR)/,$(udp_server-obj))
 	@mkdir -p $(@D)
-	$(CROSS)$(CC) $(CFLAGS) -o $@ $^
+	$(CROSS_COMPILE)$(CC) $(CFLAGS) -o $@ $^
 
 udp/client: $(addprefix $(ODIR)/,$(udp_client-obj))
 	@mkdir -p $(@D)
-	$(CROSS)$(CC) $(CFLAGS) -o $@ $^
+	$(CROSS_COMPILE)$(CC) $(CFLAGS) -o $@ $^
 
 udp/broadcast: $(addprefix $(ODIR)/,$(udp_broadcast-obj))
 	@mkdir -p $(@D)
-	$(CROSS)$(CC) $(CFLAGS) -o $@ $^
+	$(CROSS_COMPILE)$(CC) $(CFLAGS) -o $@ $^
 
 raw/server: $(addprefix $(ODIR)/,$(raw_server-obj))
 	@mkdir -p $(@D)
-	$(CROSS)$(CC) $(CFLAGS) -o $@ $^
+	$(CROSS_COMPILE)$(CC) $(CFLAGS) -o $@ $^
 
 raw/client: $(addprefix $(ODIR)/,$(raw_client-obj))
 	@mkdir -p $(@D)
-	$(CROSS)$(CC) $(CFLAGS) -o $@ $^
+	$(CROSS_COMPILE)$(CC) $(CFLAGS) -o $@ $^
 
 $(ODIR)/%.o: %.c
 	@mkdir -p $(@D)
 	@echo ">>> $<"
-	$(CROSS)$(CC) $(CFLAGS) -c $< -o $@
+	$(CROSS_COMPILE)$(CC) $(CFLAGS) -c $< -o $@
 
 include $(shell mkdir .dep 2>/dev/null) $(wildcard .dep/*)
 

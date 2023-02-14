@@ -1,8 +1,8 @@
-#CROSS = arm-unknown-linux-uclibcgnueabi-
-CC = gcc
-ODIR = .build
+CROSS_COMPILE ?=
+CC := gcc
+ODIR := .build
 
-CFLAGS = -Wall \
+CFLAGS := -Wall \
 		 -Werror
 
 EXTRAINCDIRS += intf \
@@ -11,26 +11,26 @@ EXTRAINCDIRS += intf \
 CFLAGS += $(patsubst %,-I %,$(EXTRAINCDIRS))
 CFLAGS += -MD -MP -MF .dep/$(@F).d
 
-LFLAGS =
+LFLAGS :=
 
 canrecv-obj += canrecv.o
 
 cansend-obj += cansend.o
 
-TARGET = canrecv cansend
+TARGET := canrecv cansend
 
 all: $(TARGET)
 
 canrecv: $(addprefix $(ODIR)/,$(canrecv-obj))
-	$(CROSS)$(CC) $(CFLAGS) -o $@ $^
+	$(CROSS_COMPILE)$(CC) $(CFLAGS) -o $@ $^
 
 cansend: $(addprefix $(ODIR)/,$(cansend-obj))
-	$(CROSS)$(CC) $(CFLAGS) -o $@ $^
+	$(CROSS_COMPILE)$(CC) $(CFLAGS) -o $@ $^
 
 $(ODIR)/%.o: %.c
 	@mkdir -p $(@D)
 	@echo ">>> $<"
-	$(CROSS)$(CC) $(CFLAGS) -c $< -o $@
+	$(CROSS_COMPILE)$(CC) $(CFLAGS) -c $< -o $@
 
 include $(shell mkdir .dep 2>/dev/null) $(wildcard .dep/*)
 

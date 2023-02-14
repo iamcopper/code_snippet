@@ -1,8 +1,8 @@
-#CROSS = arm-unknown-linux-uclibcgnueabi-
-CC = gcc
-ODIR = .build
+CROSS_COMPILE ?=
+CC := gcc
+ODIR := .build
 
-CFLAGS = -Wall \
+CFLAGS := -Wall \
 		 -Werror
 
 EXTRAINCDIRS += intf \
@@ -11,26 +11,26 @@ EXTRAINCDIRS += intf \
 CFLAGS += $(patsubst %,-I %,$(EXTRAINCDIRS))
 CFLAGS += -MD -MP -MF .dep/$(@F).d
 
-LFLAGS =
+LFLAGS :=
 
 server-obj += server.o
 
 client-obj += client.o
 
-TARGET = server client
+TARGET := server client
 
 all: $(TARGET)
 
 server: $(addprefix $(ODIR)/,$(server-obj))
-	$(CROSS)$(CC) $(CFLAGS) -o $@ $^
+	$(CROSS_COMPILE)$(CC) $(CFLAGS) -o $@ $^
 
 client: $(addprefix $(ODIR)/,$(client-obj))
-	$(CROSS)$(CC) $(CFLAGS) -o $@ $^
+	$(CROSS_COMPILE)$(CC) $(CFLAGS) -o $@ $^
 
 $(ODIR)/%.o: %.c
 	@mkdir -p $(@D)
 	@echo ">>> $<"
-	$(CROSS)$(CC) $(CFLAGS) -c $< -o $@
+	$(CROSS_COMPILE)$(CC) $(CFLAGS) -c $< -o $@
 
 include $(shell mkdir .dep 2>/dev/null) $(wildcard .dep/*)
 

@@ -1,8 +1,8 @@
-CROSS =
-CC = gcc
-ODIR = .build
+CROSS_COMPILE ?=
+CC := gcc
+ODIR := .build
 
-CFLAGS = -Wall \
+CFLAGS := -Wall \
 		 -Werror
 
 EXTRAINCDIRS +=
@@ -10,7 +10,7 @@ EXTRAINCDIRS +=
 CFLAGS += $(patsubst %,-I %,$(EXTRAINCDIRS))
 CFLAGS += -MD -MP -MF .dep/$(@F).d
 
-LFLAGS =
+LFLAGS :=
 
 stack-obj = seqstack/seqstack.o
 
@@ -34,26 +34,26 @@ OUT += powerExpression
 all: $(OUT)
 
 bracketMatch: $(addprefix $(ODIR)/,$(bracketMatch-obj))
-	$(CROSS)$(CC) $(CFLAGS) -o $@ $^
+	$(CROSS_COMPILE)$(CC) $(CFLAGS) -o $@ $^
 
 expressionConvert: $(addprefix $(ODIR)/,$(expressionConvert-obj))
-	$(CROSS)$(CC) $(CFLAGS) -o $@ $^
+	$(CROSS_COMPILE)$(CC) $(CFLAGS) -o $@ $^
 
 postfixExpression: $(addprefix $(ODIR)/,$(postfixExpression-obj))
-	$(CROSS)$(CC) $(CFLAGS) -o $@ $^
+	$(CROSS_COMPILE)$(CC) $(CFLAGS) -o $@ $^
 
 powerExpression: $(addprefix $(ODIR)/,$(powerExpression-obj))
-	$(CROSS)$(CC) $(CFLAGS) -o $@ $^
+	$(CROSS_COMPILE)$(CC) $(CFLAGS) -o $@ $^
 
 $(ODIR)/$(stack-obj): ../seqstack/seqstack.c
 	@mkdir -p $(@D)
 	@echo ">>> $<"
-	$(CROSS)$(CC) $(CFLAGS) -c $< -o $@
+	$(CROSS_COMPILE)$(CC) $(CFLAGS) -c $< -o $@
 
 $(ODIR)/%.o: %.c
 	@mkdir -p $(@D)
 	@echo ">>> $<"
-	$(CROSS)$(CC) $(CFLAGS) -c $< -o $@
+	$(CROSS_COMPILE)$(CC) $(CFLAGS) -c $< -o $@
 
 include $(shell mkdir .dep 2>/dev/null) $(wildcard .dep/*)
 

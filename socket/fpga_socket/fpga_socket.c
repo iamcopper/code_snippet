@@ -120,7 +120,7 @@ static ssize_t do_write_fpga_ram(int fd, const uint8_t *buf, size_t len, int fla
 
 		ret = send(fd, wbuf, DATA_HEADER_LEN + wlen + padlen + LINK_TRAILER_LEN, flags);
 		if (ret < 0) {
-			dprintf("[%s:%d] send error, ret=%d: %s.\n", __func__, __LINE__, ret, strerror(errno));
+			dprintf("[%s:%d] send error, ret=%ld: %s.\n", __func__, __LINE__, ret, strerror(errno));
 			return ret;
 		}
 
@@ -202,7 +202,7 @@ ssize_t fpga_write(int fd, const uint8_t *buf, size_t len, int flags)
 		ret = do_write_fpga_ram(fd, buf, len, flags);
 	} else {
 		if (len > MTU_MAX || len < MTU_MIN) {
-			dprintf("Parameter Error: Write length(%d) should between %d and %d.\n", len, MTU_MIN, MTU_MAX);
+			dprintf("Parameter Error: Write length(%ld) should between %d and %d.\n", len, MTU_MIN, MTU_MAX);
 			return -1;
 		}
 
@@ -215,7 +215,7 @@ ssize_t fpga_write(int fd, const uint8_t *buf, size_t len, int flags)
 ssize_t fpga_read(int fd, uint8_t *buf, size_t len, int flags)
 {
 	if (len < MTU_MAX) {
-		dprintf("Parameter Error: Read buffer length(%d) should not lower than %d.\n", len, MTU_MAX);
+		dprintf("Parameter Error: Read buffer length(%ld) should not lower than %d.\n", len, MTU_MAX);
 		return -1;
 	}
 

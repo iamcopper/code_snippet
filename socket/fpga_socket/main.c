@@ -20,10 +20,10 @@ int main(int argc, char *argv[])
 	while (1) {
 		printf("Waitint for read:\n");
 		ret = fpga_read(fd, buf, BUF_SIZE, 0);
-		printf("fpga_read() ret=%d\n", ret);
+		printf("fpga_read() ret=%ld\n", ret);
 		if (ret > 0) {
 			ret = fpga_write(fd, buf, ret, 0);
-			printf("fpga_read() ret=%d\n", ret);
+			printf("fpga_read() ret=%ld\n", ret);
 		}
 	}
 

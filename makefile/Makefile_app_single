@@ -1,4 +1,4 @@
-CROSS := aarch64-linux-gnu-
+CROSS_COMPILE ?=
 CC := gcc
 CFLAGS := -Wall -g
 LFLAGS :=
@@ -9,10 +9,10 @@ objs := gpio.o
 all: $(out)
 
 $(out):$(objs)
-	$(CROSS)$(CC) $^ -o $@ $(LFLAGS)
+	$(CROSS_COMPILE)$(CC) $^ -o $@ $(LFLAGS)
 
 %.o:%.c
-	$(CROSS)$(CC) -c $< -o $@ $(CFLAGS)
+	$(CROSS_COMPILE)$(CC) -c $< -o $@ $(CFLAGS)
 
 clean:
 	rm -rf *.o $(objs) $(out)
