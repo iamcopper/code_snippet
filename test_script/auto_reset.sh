@@ -1,10 +1,10 @@
 #!/bin/bash
 
-echo -e "*************************************"
-echo -e "*          Auto Reset Test          *"
-echo -e "*************************************"
+echo -e "*********************************"
+echo -e "*          Auto Reset Test      *"
+echo -e "*********************************"
 
-HOST="192.168.1.195"
+HOST="192.168.1.157"
 USR="root"
 PWD="123"
 SLEEP="60"
@@ -20,7 +20,7 @@ echo -e "LOOP=${LOOP}\n"
 for (( i = 0; i < ${LOOP}; i++ )); do
 	echo -e "========== FOR LOOP $i =========="
 
-	CMD="timeout ${TIMEOUT} ssh -l ${USR} ${HOST} ${SSH_CMD}"
+	CMD="timeout ${TIMEOUT} sshpass -p ${PWD} ssh -l ${USR} ${HOST} ${SSH_CMD}"
 	echo -e "${CMD}"
 	${CMD}
 	if [[ $? == 124 ]]; then
