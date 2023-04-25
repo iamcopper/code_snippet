@@ -9,16 +9,16 @@ echo -e "* - To execute a specific cmd via ssh in multiple times,"
 echo -e "*   and summary the times for each result.              "
 echo -e "********************************************************"
 
-HOST="192.168.1.159"
+HOST="192.168.1.183"
 USR="root"
 PWD="123"
-SLEEP="80"
+SLEEP="70"
 
-#CMD="ls /dev/video*"
-#WC_CMD="wc -w"
+CMD="ls /dev/video*"
+WC_CMD="wc -w"
 
-CMD="lsblk | grep nvme"
-WC_CMD="wc -l"
+#CMD="lsblk | grep nvme"
+#WC_CMD="wc -l"
 
 ########################################################
 
@@ -66,19 +66,18 @@ for (( i = 1; i <= ${LOOP}; i++ )); do
 		echo -e "WC_NUM_ARRAY[${j}] = ${WC_NUM_ARRAY[${j}]}"
 	done
 
-	# Reboot
-	timeout ${TIMEOUT} sshpass -p ${PWD} ssh -l ${USR} ${HOST} reboot
-	ssh_ret=$?
-	if [[ ${ssh_ret} == 124 ]]; then
-		echo -e "[ERROR] ssh reboot timeout, exit, i=${i}\n"
-		exit 1
-	fi
+	# Execute Reboot
+	if [[ ${i} -lt ${LOOP} ]]; then
+		timeout ${TIMEOUT} sshpass -p ${PWD} ssh -l ${USR} ${HOST} reboot
+		ssh_ret=$?
+		if [[ ${ssh_ret} == 124 ]]; then
+			echo -e "[ERROR] ssh reboot timeout, exit, i=${i}\n"
+			exit 1
+		fi
 
-	if [[ i -lt ${LOOP} ]]; then
 		echo -e "Waiting ${SLEEP} seconds ... \n"
 		sleep ${SLEEP}
 	fi
-
 done
 
 echo -e "\n============= Test Result ============="
