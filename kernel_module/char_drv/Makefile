@@ -4,22 +4,27 @@
 
 ifeq ($(KERNELRELEASE),)
 
-PWD := $(shell pwd)
+NPROC := $(shell nproc)
+PWD   := $(shell pwd)
 
-KERNEL_SRC := /lib/modules/$(shell uname -r)/build
+KERNEL_SRC      := /lib/modules/$(shell uname -r)/build
+MOD_INSTALL_DIR :=
 
 modules:
 	$(MAKE) $@ \
+		-j $(NPROC) \
 		-C $(KERNEL_SRC) \
 		M=$(PWD)
 
 modules_install: modules
 	$(MAKE) $@ \
+		-j $(NPROC) \
 		-C $(KERNEL_SRC) \
 		M=$(PWD)
 
 clean:
 	$(MAKE) $@ \
+		-j $(NPROC) \
 		-C $(KERNEL_SRC) \
 		M=$(PWD)
 
