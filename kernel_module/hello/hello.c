@@ -1,17 +1,21 @@
+#define DEBUG
+
 #include <linux/module.h>
 #include <linux/init.h>
 #include <linux/kernel.h>
 
 static int hello_init(void)
 {
-	printk(KERN_ALERT "Hello world\n");
-//	printk(KERN_ALERT "VAR1=%d\n", VAR1);
+	//printk(KERN_ALERT "Hello world\n");
+	//printk(KERN_ALERT "VAR1=%d\n", VAR1);
+	pr_debug("[DEBUG] init func=%s\n", __func__);
 	return 0;
 }
 
 static void hello_exit(void)
 {
-	printk(KERN_ALERT "Goodbye world\n");
+	//printk(KERN_ALERT "Goodbye world\n");
+	pr_debug("[DEBUG] exit func=%s\n", __func__);
 }
 
 module_init(hello_init);
