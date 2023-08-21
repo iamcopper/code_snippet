@@ -23,31 +23,18 @@ KERNEL_SRC := $(KERNEL_SRC_PHYTIUM)
 KERNEL_OUT := $(KERNEL_OUT_PHYTIUM)
 MOD_INSTALL_DIR :=
 
-modules:
+modules modules_install clean help:
 	$(MAKE) $@ \
 		-j $(NPROC) \
 		-C $(KERNEL_SRC) \
 		O=$(KERNEL_OUT) \
 		M=$(PWD)
 
-modules_install: modules
-	$(MAKE) $@ \
-		-j $(NPROC) \
-		-C $(KERNEL_SRC) \
-		O=$(KERNEL_OUT) \
-		M=$(PWD)
+# install: modules
+# Custom install command, intall to MOD_INSTALL_DIR
 
-install: modules
-	# Custom install command, intall to MOD_INSTALL_DIR
-
-clean:
-	$(MAKE) $@ \
-		-j $(NPROC) \
-		-C $(KERNEL_SRC) \
-		O=$(KERNEL_OUT) \
-		M=$(PWD)
-
-.PHONY: modules modules_install install clean
+.PHONY: modules modules_install clean help
+.PHONY: install
 
 else
 

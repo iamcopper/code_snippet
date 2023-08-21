@@ -10,30 +10,22 @@ PWD   := $(shell pwd)
 KERNEL_SRC      := /lib/modules/$(shell uname -r)/build
 MOD_INSTALL_DIR :=
 
-modules:
+modules modules_install clean help:
 	$(MAKE) $@ \
 		-j $(NPROC) \
 		-C $(KERNEL_SRC) \
 		M=$(PWD)
 
-modules_install: modules
-	$(MAKE) $@ \
-		-j $(NPROC) \
-		-C $(KERNEL_SRC) \
-		M=$(PWD)
+# install: modules
+# custom install command, intall to MOD_INSTALL_DIR
 
-clean:
-	$(MAKE) $@ \
-		-j $(NPROC) \
-		-C $(KERNEL_SRC) \
-		M=$(PWD)
-
-.PHONY: modules modules_install clean
+.PHONY: modules modules_install clean help
+.PHONY: install
 
 else
 
 # Final module name: regrw.ko
-obj-m := regrw.o
+obj-m   := regrw.o
 
 regrw-y += regrw1.o
 regrw-y += regrw2.o
