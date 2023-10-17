@@ -1,0 +1,13 @@
+[Unit]
+Description=The Ritrontek APP Monitor Service
+
+[Service]
+Type=simple
+ExecStart=/home/rk/helloqt/monitor.sh
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=mixed
+Restart=always
+User=rk
+
+[Install]
+WantedBy=graphical.target

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=QT GUI App
+Comment=My QT app
+NoDisplay=false
+Exec=/home/rk/helloqt/helloqt
+NotShowIn=GNOME;KDE;XFCE;
+AutostartCondition=if-exists
