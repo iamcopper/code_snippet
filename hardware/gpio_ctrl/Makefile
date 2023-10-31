@@ -1,9 +1,20 @@
-CFLAGS = -g -Wall
-OBJS = *.c 
-LIBS = -lpthread -lm
-CXX = aarch64-linux-gnu-gcc
-all:gpio_test_demo
-gpio_test_demo: $(OBJS)
-	$(CXX) $(CFLAGS) $(OBJS) -o $@ $(LIBS) 
+CROSS_COMPILE ?= aarch64-linux-gnu-
+CC := gcc
+CFLAGS := -Wall -g
+LFLAGS :=
+
+out := gpio
+objs := gpio_test_demo.o
+
+all: $(out)
+
+$(out):$(objs)
+	$(CROSS_COMPILE)$(CC) $^ -o $@ $(LFLAGS)
+
+%.o:%.c
+	$(CROSS_COMPILE)$(CC) -c $< -o $@ $(CFLAGS)
+
 clean:
-	rm gpio_test_demo
+	rm -rf *.o $(objs) $(out)
+
+.PHONY: clean
