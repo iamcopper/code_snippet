@@ -4,7 +4,7 @@ CFLAGS := -Wall -g
 LFLAGS :=
 
 out := gpio
-objs := gpio_test_demo.o
+objs := phytium_gpio.o
 
 all: $(out)
 
