@@ -1,3 +1,6 @@
+Based on busybox/devmem:
+https://github.com/mirror/busybox/blob/master/miscutils/devmem.c
+
 output : 
 	 GPIO0_A2(GPIO0)	GPIO1_B2(GPIO10)	GPIO1_A3(GPIO16) 
 	 GPIO0_A3(GPIO1)	GPIO1_B3(GPIO11)	GPIO1_A4(GPIO17)
