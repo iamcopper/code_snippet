@@ -1,10 +1,12 @@
-CROSS_COMPILE ?= aarch64-linux-gnu-
+CROSS_COMPILE ?=
 CC := gcc
 CFLAGS := -Wall -g
 LFLAGS :=
 
-out := gpio
-objs := phytium_gpio.o
+out := devmem
+
+objs += main.o
+objs += devmem.o
 
 all: $(out)
 
