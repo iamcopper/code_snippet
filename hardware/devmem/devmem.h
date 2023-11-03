@@ -3,10 +3,10 @@
 
 #include <stdint.h>
 
-void *devmem_open(void);
-int devmem_close(void *addr);
+int devmem_open(void *addr);
+int devmem_close(int fd);
 
-int devmem_read(void *virt_addr, uint8_t len, uint32_t *val);
-int devmem_write(void *virt_addr, uint8_t len, uint32_t val);
+int devmem_read(int fd, uint8_t width, uint32_t *val);
+int devmem_write(int fd, uint8_t width, uint32_t val);
 
 #endif /* __DEVMEM_H__ */
