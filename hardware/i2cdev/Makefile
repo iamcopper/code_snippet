@@ -5,7 +5,7 @@ LFLAGS :=
 
 out := i2cdev
 objs := main.o
-objs += i2cbusses.o
+objs += i2cdev.o
 
 all: $(out)
 

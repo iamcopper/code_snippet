@@ -21,8 +21,7 @@ server
 server_blocked
 server_select
 server_epoll
-i2cdev
-gpio
+/hardware/i2cdev/i2cdev
 
 *.key
 *.key.*
