@@ -2,6 +2,7 @@
 
 void usage(char *appname)
 {
+	printf("\nPhytium 2004/D2000 GPIO Control\n\n");
 	printf("Usage: %s <gpio> <cmd> [args]\n\n", appname);
 	printf("Options:\n");
 	printf("<gpio> can be:\n");

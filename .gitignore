@@ -22,6 +22,8 @@ server_blocked
 server_select
 server_epoll
 /hardware/i2cdev/i2cdev
+/hardware/devmem/devmem
+/hardware/phytium_gpio/phytium_gpio
 
 *.key
 *.key.*

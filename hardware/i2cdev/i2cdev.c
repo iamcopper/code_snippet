@@ -113,7 +113,7 @@ int i2cread(int fd, uint8_t devaddr, uint16_t regaddr, uint8_t *regval)
 	return 0;
 }
 
-int i2cwrite(int fd, uint8_t devaddr, uint16_t regaddr, uint8_t val)
+int i2cwrite(int fd, uint8_t devaddr, uint16_t regaddr, uint8_t regval)
 {
 	struct i2c_msg msgs[1] = {0};
 	uint8_t msg_buf_w[3] = {(regaddr >> 8) & 0xFF, regaddr & 0xFF, val};
