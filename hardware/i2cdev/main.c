@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
 	printf("regaddr : 0x%04x\n", regaddr);
 
 	fd = open_i2cdev(i2cbus, filename, sizeof(filename), 0);
-	if (fd < 0 || check_funcs(fd))
+	if (fd < 0)
 		exit(1);
 
 	ret = i2cread(fd, devaddr, regaddr, &regval);

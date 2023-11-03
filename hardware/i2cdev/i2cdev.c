@@ -11,6 +11,27 @@
 #include <errno.h>
 #include "i2cdev.h"
 
+/* Copied from i2c-tools/tools/i2ctransfer.c */
+#define MISSING_FUNC_FMT	"Error: Adapter does not have %s capability\n"
+static int check_funcs(int fd)
+{
+	unsigned long funcs;
+
+	/* check adapter functionality */
+	if (ioctl(fd, I2C_FUNCS, &funcs) < 0) {
+		fprintf(stderr, "Error: Could not get the adapter "
+			"functionality matrix: %s\n", strerror(errno));
+		return -1;
+	}
+
+	if (!(funcs & I2C_FUNC_I2C)) {
+		fprintf(stderr, MISSING_FUNC_FMT, "I2C transfers");
+		return -1;
+	}
+
+	return 0;
+}
+
 /* Copied from i2c-tools/tools/i2cbusses.c */
 int open_i2cdev(int i2cbus, char *filename, size_t size, int quiet)
 {
@@ -45,33 +66,17 @@ int open_i2cdev(int i2cbus, char *filename, size_t size, int quiet)
 		}
 	}
 
+	if (file > 0 && check_funcs(file)) {
+		close(file);
+		return -EIO;
+	}
+
 	return file;
 }
 
 int close_i2cdev(int fd)
 {
 	return close(fd);
-}
-
-/* Copied from i2c-tools/tools/i2ctransfer.c */
-#define MISSING_FUNC_FMT	"Error: Adapter does not have %s capability\n"
-int check_funcs(int fd)
-{
-	unsigned long funcs;
-
-	/* check adapter functionality */
-	if (ioctl(fd, I2C_FUNCS, &funcs) < 0) {
-		fprintf(stderr, "Error: Could not get the adapter "
-			"functionality matrix: %s\n", strerror(errno));
-		return -1;
-	}
-
-	if (!(funcs & I2C_FUNC_I2C)) {
-		fprintf(stderr, MISSING_FUNC_FMT, "I2C transfers");
-		return -1;
-	}
-
-	return 0;
 }
 
 int i2cread(int fd, uint8_t devaddr, uint16_t regaddr, uint8_t *regval)
