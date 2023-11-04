@@ -1,0 +1,21 @@
+CROSS_COMPILE ?=
+CC := gcc
+CFLAGS := -Wall -g
+LFLAGS :=
+
+out += app1
+out += app2
+out += app3
+
+all: $(out)
+
+$(out):%:%.o
+	$(CROSS_COMPILE)$(CC) $^ -o $@ $(LFLAGS)
+
+%.o:%.c
+	$(CROSS_COMPILE)$(CC) -c $< -o $@ $(CFLAGS)
+
+clean:
+	rm -rf *.o $(out)
+
+.PHONY: clean
