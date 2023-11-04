@@ -3,9 +3,9 @@ CC := gcc
 CFLAGS := -Wall -g
 LFLAGS :=
 
-out += app1
-out += app2
-out += app3
+out := $(patsubst %.c,%,$(wildcard *.c))
+#out += app1
+#out += app2
 
 all: $(out)
 
