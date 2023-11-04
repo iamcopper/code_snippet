@@ -140,3 +140,42 @@ int devmem_write(int fd, uint8_t width, uint32_t val)
 
 	return ret;
 }
+
+
+int devmem_read2(void *addr, uint8_t width, uint32_t *val)
+{
+	int fd, ret;
+
+	fd = devmem_open(addr);
+	if (fd <= 0)
+		return 1;
+
+	ret = devmem_read(fd, width, val);
+	if (ret < 0)
+		goto err;
+
+	return devmem_close(fd);
+
+err:
+	devmem_close(fd);
+	return -1;
+}
+
+int devmem_write2(void *addr, uint8_t width, uint32_t val)
+{
+	int fd, ret;
+
+	fd = devmem_open(addr);
+	if (fd <= 0)
+		return 1;
+
+	ret = devmem_write(fd, width, val);
+	if (ret < 0)
+		goto err;
+
+	return devmem_close(fd);
+
+err:
+	devmem_close(fd);
+	return -1;
+}
