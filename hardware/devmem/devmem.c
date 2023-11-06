@@ -8,6 +8,15 @@
 #include <errno.h>
 #include "devmem.h"
 
+#define CLR_BIT(val, bit) \
+    (val &= ~(1 << bit))
+
+#define SET_BIT(val, bit) \
+    (val |= (1 << bit))
+
+#define GET_BIT(val, bit) \
+    ((val >> bit) & 0x1)
+
 #define DEVMEM "/dev/mem"
 
 struct devmem {
@@ -178,4 +187,44 @@ int devmem_write2(void *addr, uint8_t width, uint32_t val)
 err:
 	devmem_close(fd);
 	return -1;
+}
+
+int devmem_clr_bit(void *addr, uint8_t width, uint8_t bit)
+{
+	uint32_t value;
+
+	if (0 > devmem_read2(addr, width, &value))
+		return -1;
+
+	CLR_BIT(value, bit);
+
+	if (0 > devmem_write2(addr, width, value))
+		return -1;
+
+	return 0;
+}
+
+int devmem_set_bit(void *addr, uint8_t width, uint8_t bit)
+{
+	uint32_t value;
+
+	if (0 > devmem_read2(addr, width, &value))
+		return -1;
+
+	SET_BIT(value, bit);
+
+	if (0 > devmem_write2(addr, width, value))
+		return -1;
+
+	return 0;
+}
+
+int devmem_get_bit(void *addr, uint8_t width, uint8_t bit)
+{
+	uint32_t value;
+
+	if (0 > devmem_read2(addr, width, &value))
+		return -1;
+
+	return GET_BIT(value, bit);
 }

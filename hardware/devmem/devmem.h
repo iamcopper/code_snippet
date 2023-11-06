@@ -11,4 +11,8 @@ int devmem_write(int fd, uint8_t width, uint32_t val);
 int devmem_read2(void *addr, uint8_t width, uint32_t *val);
 int devmem_write2(void *addr, uint8_t width, uint32_t val);
 
+int devmem_clr_bit(void *addr, uint8_t width, uint8_t bit);
+int devmem_set_bit(void *addr, uint8_t width, uint8_t bit);
+int devmem_get_bit(void *addr, uint8_t width, uint8_t bit);
+
 #endif /* __DEVMEM_H__ */
