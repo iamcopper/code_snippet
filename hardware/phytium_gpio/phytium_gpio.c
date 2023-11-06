@@ -12,6 +12,13 @@
 #define GPIO_0_ADDR   0x28004000
 #define GPIO_1_ADDR   0x28005000
 
+/* GPIO CMP Flags */
+#define GPIO_CMP_ALL       (GPIO_CMP_CTRL | GPIO_CMP_PORT | GPIO_CMP_PIN)
+#define GPIO_CMP_CTRL_PORT (GPIO_CMP_CTRL | GPIO_CMP_PORT)
+#define GPIO_CMP_CTRL      (1 << 2)
+#define GPIO_CMP_PORT      (1 << 1)
+#define GPIO_CMP_PIN       (1 << 0)
+
 #define ARRAY_SIZE(array) \
 	sizeof(array)/(sizeof(array[0]))
 
@@ -82,12 +89,6 @@ const static gpio_addr_t gpio_addr[] = {
 	{{1, 'a', 0}, GPIO_1_ADDR + 0x04, GPIO_1_ADDR + 0x08, GPIO_1_ADDR + 0x00},
 	{{1, 'b', 0}, GPIO_1_ADDR + 0x10, GPIO_1_ADDR + 0x14, GPIO_1_ADDR + 0x0C},
 };
-
-#define GPIO_CMP_ALL       (GPIO_CMP_CTRL | GPIO_CMP_PORT | GPIO_CMP_PIN)
-#define GPIO_CMP_CTRL_PORT (GPIO_CMP_CTRL | GPIO_CMP_PORT)
-#define GPIO_CMP_CTRL      (1 << 2)
-#define GPIO_CMP_PORT      (1 << 1)
-#define GPIO_CMP_PIN       (1 << 0)
 
 static int _gpio_cmp(const gpio_t *gpio1, const gpio_t *gpio2, uint8_t flag)
 {
@@ -246,7 +247,6 @@ static int _gpio_get_dir_reg(const gpio_desc_t *gpio_desc, uint8_t *dir)
 
 	return 0;
 }
-
 
 static int _gpio_set_val_reg(gpio_desc_t *gpio_desc, uint8_t val)
 {
