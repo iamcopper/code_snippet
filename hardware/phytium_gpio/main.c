@@ -1,4 +1,16 @@
 #include <stdio.h>
+#include <string.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <errno.h>
+#include "phytium_gpio.h"
+
+#define CMD_INIT "init"
+#define CMD_SET  "set"
+#define CMD_GET  "get"
+
+#define CMD_INIT_DIR_IN  "in"
+#define CMD_INIT_DIR_OUT "out"
 
 void usage(char *appname)
 {
@@ -22,6 +34,78 @@ void usage(char *appname)
 
 int main(int argc, char *argv[])
 {
-	usage(argv[0]);
+	if (argc < 3) {
+		usage(argv[0]);
+		return 1;
+	}
+
+	const char *cmd = argv[1];
+	const char *gpioname = argv[2];
+
+	if (0 == strcmp(cmd, CMD_INIT)) {
+		if (argc < 4) {
+			printf("[ERROR] Missing args (in/out) for \"init\" cmd.\n");
+			usage(argv[0]);
+			return 1;
+		}
+
+		const char *dirstr = argv[3];
+		uint8_t dir = 0;
+		int ret;
+
+		if (0 == strcmp(dirstr, CMD_INIT_DIR_IN)) {
+			dir = GPIO_DIR_IN;
+		} else if (0 == strcmp(dirstr, CMD_INIT_DIR_OUT)) {
+			dir = GPIO_DIR_OUT;
+		} else {
+			printf("[ERROR] Args error for \"init\" cmd: %s\n", dirstr);
+			usage(argv[0]);
+			return 1;
+		}
+
+		ret = gpio_init(gpioname, dir);
+		if (ret) {
+			printf("[ERROR] gpio_get() failed.\n");
+			return 1;
+		}
+
+		printf("[GPIO Init] %s : %s\n", gpioname, dirstr);
+		return 0;
+	} else if (0 == strcmp(cmd, CMD_SET)) {
+		if (argc < 4) {
+			printf("[ERROR] Missing args (0/1) for \"set\" cmd.\n");
+			usage(argv[0]);
+			return 1;
+		}
+
+		uint8_t val = strtoul(argv[3], NULL, 0);
+		if (errno || val > 1) {
+			printf("[ERROR] Args error for \"set\" cmd: %d\n", val);
+			usage(argv[0]);
+			return 1;
+		}
+
+		if (gpio_set(gpioname, val)) {
+			printf("[ERROR] gpio_get() failed.\n");
+			return 1;
+		}
+
+		printf("[GPIO Set] %s : 0x%x\n", gpioname, val);
+		return 0;
+	} else if (0 == strcmp(cmd, CMD_GET)) {
+		uint8_t val;
+		if (gpio_get(gpioname, &val)) {
+			printf("[ERROR] gpio_get() failed.\n");
+			return 1;
+		}
+
+		printf("[GPIO Get] %s : 0x%x\n", gpioname, val);
+		return 0;
+	} else {
+		printf("[ERROR] Unsupport cmd: %s.\n", cmd);
+		usage(argv[0]);
+		return 1;
+	}
+
 	return 0;
 }
