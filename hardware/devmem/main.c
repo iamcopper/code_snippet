@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
 	void *addr;
 	uint8_t width = 32;
 	uint32_t val;
-	int fd, ret;
+	int ret;
 
 	if (argc < 2 || argc > 4) {
 		usage(argv[0]);
@@ -39,7 +39,8 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	fd = devmem_open(addr);
+#if 0
+	int fd = devmem_open(addr);
 	if (fd <= 0) {
 		fprintf(stderr, "[ERROR] devmem_open failed\n");
 		return 1;
@@ -78,6 +79,41 @@ int main(int argc, char *argv[])
 	ret = devmem_close(fd);
 	if (ret < 0)
 		fprintf(stderr, "[ERROR] devmem_close failed\n");
+#else
+	if (argc < 4) {
+		/* DEVMEM Read */
+		ret = devmem_read2(addr, width, &val);
+		if (ret < 0) {
+			fprintf(stderr, "[ERROR] devmem_read2 failed\n");
+			return 1;
+		}
+
+		switch (width) {
+			case 8:
+				printf("0x%01x\n", val);
+				break;
+			case 16:
+				printf("0x%02x\n", val);
+				break;
+			case 32:
+				printf("0x%04x\n", val);
+				break;
+		}
+	} else {
+		/* DEVMEM Write */
+		val = strtoul(argv[3], NULL, 0);
+		if (errno) {
+			perror("Invalid val specified\n");
+			return 1;
+		}
+
+		ret = devmem_write2(addr, width, val);
+		if (ret < 0) {
+			fprintf(stderr, "[ERROR] devmem_write2 failed\n");
+			return 1;
+		}
+	}
+#endif
 
 	return ret;
 }
