@@ -30,6 +30,15 @@ void usage(char *appname)
 	printf("%s init 1-b-7 out\n", appname);
 	printf("%s set  1-b-7 1\n", appname);
 	printf("%s get  1-b-7\n", appname);
+
+	/******************************/
+
+	printf("Examples:\n");
+	printf("%s -l [1-b-7]\n", appname);
+	printf("%s -s dir <1-b-7> in/out \n", appname);
+	printf("%s -s val <1-b-7> 0/1 \n", appname);
+	printf("%s -g dir <1-b-7>\n", appname);
+	printf("%s -g val <1-b-7>\n", appname);
 }
 
 int main(int argc, char *argv[])
