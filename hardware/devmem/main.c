@@ -6,9 +6,10 @@
 
 void usage(char *appname)
 {
-	printf("\nRead/write from physical address\n\n");
-	printf("Usage: %s <address> [<width> [value]]\n\n", appname);
+	printf("\nUsage: %s <address> <offset> [<width> [value]]\n", appname);
+	printf("Read/write from physical address\n\n");
 	printf("  address --- address to read or write\n");
+	printf("  offset  --- address offset, 0~255 [0]\n");
 	printf("  width   --- width 8/16/[32]\n");
 	printf("  value   --- value to be written\n\n");
 }
@@ -16,11 +17,11 @@ void usage(char *appname)
 int main(int argc, char *argv[])
 {
 	void *addr;
-	uint8_t width = 32;
+	uint8_t offset = 0x00, width = 32;
 	uint32_t val;
 	int ret;
 
-	if (argc < 2 || argc > 4) {
+	if (argc < 3 || argc > 5) {
 		usage(argv[0]);
 		return 1;
 	}
@@ -31,89 +32,53 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	if (argc > 2) {
-		width = strtoul(argv[2], NULL, 0);
+	offset = strtoul(argv[2], NULL, 0);
+	if (errno) {
+		perror("Invalid address specified\n");
+		return 1;
+	}
+
+	if (argc >= 4) {
+		width = strtoul(argv[3], NULL, 0);
 		if (errno && width != 8 && width != 16 && width != 32) {
 			fprintf(stderr, "Invalid width specified\n");
 			return 1;
 		}
 	}
 
-#if 0
-	int fd = devmem_open(addr);
-	if (fd <= 0) {
-		fprintf(stderr, "[ERROR] devmem_open failed\n");
-		return 1;
-	}
-
-	if (argc < 4) {
+	if (argc < 5) {
 		/* DEVMEM Read */
-		ret = devmem_read(fd, width, &val);
-		if (ret < 0)
-			fprintf(stderr, "[ERROR] devmem_read failed\n");
-
-		switch (width) {
-			case 8:
-				printf("0x%01x\n", val);
-				break;
-			case 16:
-				printf("0x%02x\n", val);
-				break;
-			case 32:
-				printf("0x%04x\n", val);
-				break;
-		}
-	} else {
-		/* DEVMEM Write */
-		val = strtoul(argv[3], NULL, 0);
-		if (errno) {
-			perror("Invalid val specified\n");
-			return 1;
-		}
-
-		ret = devmem_write(fd, width, val);
-		if (ret < 0)
-			fprintf(stderr, "[ERROR] devmem_read failed\n");
-	}
-
-	ret = devmem_close(fd);
-	if (ret < 0)
-		fprintf(stderr, "[ERROR] devmem_close failed\n");
-#else
-	if (argc < 4) {
-		/* DEVMEM Read */
-		ret = devmem_read2(addr, width, &val);
+		ret = devmem_read2(addr, offset, width, &val);
 		if (ret < 0) {
-			fprintf(stderr, "[ERROR] devmem_read2 failed\n");
+			fprintf(stderr, "[ERROR] devmem_read2 failed(ret=%d)\n", ret);
 			return 1;
 		}
 
 		switch (width) {
 			case 8:
-				printf("0x%01x\n", val);
-				break;
-			case 16:
 				printf("0x%02x\n", val);
 				break;
-			case 32:
+			case 16:
 				printf("0x%04x\n", val);
+				break;
+			case 32:
+				printf("0x%08x\n", val);
 				break;
 		}
 	} else {
 		/* DEVMEM Write */
-		val = strtoul(argv[3], NULL, 0);
+		val = strtoul(argv[4], NULL, 0);
 		if (errno) {
 			perror("Invalid val specified\n");
 			return 1;
 		}
 
-		ret = devmem_write2(addr, width, val);
+		ret = devmem_write2(addr, offset, width, val);
 		if (ret < 0) {
-			fprintf(stderr, "[ERROR] devmem_write2 failed\n");
+			fprintf(stderr, "[ERROR] devmem_write2 failed(ret=%d)\n", ret);
 			return 1;
 		}
 	}
-#endif
 
 	return ret;
 }
