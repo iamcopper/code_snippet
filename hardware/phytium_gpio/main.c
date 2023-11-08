@@ -19,9 +19,9 @@ void usage(char *appname)
 	printf("Options:\n");
 	printf("<gpiodesc> can be:\n");
 	printf("  ctrl-port-pin, eg: 1-b-7\n");
-	printf("  ctrl : 0-1\n");
-	printf("  port : a, A, b, B\n");
-	printf("  pin  : 0-7\n");
+	printf("  ctrl : 0, 1\n");
+	printf("  port : a, b\n");
+	printf("  pin  : 0 ~ 7\n");
 	printf("<cmd> and [args] are corresponding :\n");
 	printf("  init in/out ---  init gpio pin as in/out\n");
 	printf("  set  0/1    ---  set gpio pin to 0/1\n");
