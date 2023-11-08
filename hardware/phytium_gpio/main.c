@@ -14,8 +14,8 @@
 
 void usage(char *appname)
 {
-	printf("\nPhytium 2004/D2000 GPIO Control\n\n");
-	printf("Usage: %s <cmd> <gpiodesc> [args]\n\n", appname);
+	printf("\nUsage: %s <cmd> <gpiodesc> [args]\n", appname);
+	printf("Phytium 2004/D2000 GPIO Control\n\n");
 	printf("Options:\n");
 	printf("<gpiodesc> can be:\n");
 	printf("  ctrl-port-pin, eg: 1-b-7\n");
@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
 
 		ret = gpio_init(gpioname, dir);
 		if (ret) {
-			printf("[ERROR] gpio_get() failed.\n");
+			printf("[ERROR] gpio_get() failed (ret=%d)\n", ret);
 			return 1;
 		}
 

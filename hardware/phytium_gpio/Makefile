@@ -1,4 +1,4 @@
-CROSS_COMPILE ?=
+CROSS_COMPILE ?= aarch64-linux-gnu-
 CC := gcc
 CFLAGS := -Wall -g
 LFLAGS :=

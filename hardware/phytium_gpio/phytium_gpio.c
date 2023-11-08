@@ -118,36 +118,36 @@ static int _gpio_desc_init(gpio_desc_t *gpio_desc, const char *gpioname)
 	/* get gpio controller */
 	str = strtok(strtmp, "-");
 	if (!str) {
-		fprintf(stderr, "[ERROR] GPIO CTRL get error");
+		fprintf(stderr, "[ERROR] GPIO CTRL get error\n");
 		return -1;
 	}
 	gpio_desc->gpio_pin.ctrl = strtoul(str, NULL, 0);
 	if (errno || gpio_desc->gpio_pin.ctrl >= GPIO_CTRL_NUM) {
-		fprintf(stderr, "[ERROR] GPIO CTRL format or range error");
+		fprintf(stderr, "[ERROR] GPIO CTRL format or range error\n");
 		return -1;
 	}
 
 	/* get gpio port */
 	str = strtok(str, "-");
 	if (!str) {
-		fprintf(stderr, "[ERROR] GPIO PORT get error");
+		fprintf(stderr, "[ERROR] GPIO PORT get error\n");
 		return -1;
 	}
 	gpio_desc->gpio_pin.port = tolower(str[0]);
 	if (gpio_desc->gpio_pin.port < 'a' || gpio_desc->gpio_pin.port > 'b') {
-		fprintf(stderr, "[ERROR] GPIO PORT range error");
+		fprintf(stderr, "[ERROR] GPIO PORT range error: %c\n", gpio_desc->gpio_pin.port);
 		return -1;
 	}
 
 	/* get gpio pin */
 	str = strtok(str, "-");
 	if (!str) {
-		fprintf(stderr, "[ERROR] GPIO PIN get error");
+		fprintf(stderr, "[ERROR] GPIO PIN get error\n");
 		return -1;
 	}
 	gpio_desc->gpio_pin.pin = strtoul(str, NULL, 0);
 	if (errno || gpio_desc->gpio_pin.pin >= GPIO_PIN_NUM) {
-		fprintf(stderr, "[ERROR] GPIO PIN format or range error");
+		fprintf(stderr, "[ERROR] GPIO PIN format or range error: %d\n", gpio_desc->gpio_pin.pin);
 		return -1;
 	}
 
@@ -159,7 +159,7 @@ static int _gpio_desc_init(gpio_desc_t *gpio_desc, const char *gpioname)
 		}
 	}
 	if (!gpio_desc->pinmux) {
-		fprintf(stderr, "[ERROR] gpio_pinmux not found");
+		fprintf(stderr, "[ERROR] gpio_pinmux not found\n");
 		return -1;
 	}
 
@@ -171,7 +171,7 @@ static int _gpio_desc_init(gpio_desc_t *gpio_desc, const char *gpioname)
 		}
 	}
 	if (!gpio_desc->ctrl) {
-		fprintf(stderr, "[ERROR] gpio_ctrl not found");
+		fprintf(stderr, "[ERROR] gpio_ctrl not found\n");
 		return -1;
 	}
 

@@ -108,7 +108,7 @@ int devmem_read(devmem_t *devmem, uint8_t offset, uint8_t width, uint32_t *val)
 			return -1;
 			break;
 	}
-
+	printf("[DEBUG-%s] addr=0x%08lx, val=0x%08x\n", __func__, (uint64_t)devmem->addr + offset, *val);
 	return 0;
 }
 
@@ -133,6 +133,7 @@ int devmem_write(devmem_t *devmem, uint8_t offset, uint8_t width, uint32_t val)
 			break;
 	}
 
+	printf("[DEBUG-%s] addr=0x%08lx, val=0x%08x\n", __func__, (uint64_t)devmem->addr + offset, val);
 	return 0;
 }
 
@@ -144,12 +145,12 @@ int devmem_clr_bit(devmem_t *devmem, uint8_t offset, uint8_t width, uint8_t bit)
 		return -1;
 
 	if (0 > devmem_read(devmem, offset, width, &val))
-		return -1;
+		return -2;
 
 	val &= ~(1 << bit);
 
 	if (0 > devmem_write(devmem, offset, width, val))
-		return -1;
+		return -3;
 
 	return 0;
 }
@@ -162,12 +163,12 @@ int devmem_set_bit(devmem_t *devmem, uint8_t offset, uint8_t width, uint8_t bit)
 		return -1;
 
 	if (0 > devmem_read(devmem, offset, width, &val))
-		return -1;
+		return -2;
 
 	val |= (1 << bit);
 
 	if (0 > devmem_write(devmem, offset, width, val))
-		return -1;
+		return -3;
 
 	return 0;
 }
@@ -278,7 +279,7 @@ int devmem_get_bit2(void *addr, uint8_t offset, uint8_t width, uint8_t bit)
 		goto err;
 
 	devmem_close(devmem);
-	return 0;
+	return val;
 
 err:
 	devmem_close(devmem);
