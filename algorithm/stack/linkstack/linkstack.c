@@ -43,6 +43,7 @@ stack_t *stack_init(int max) {
 	}
 	stack->len = 0;
 	stack->max = max;
+	return stack;
 }
 
 int stack_destory(stack_t *stack) {
