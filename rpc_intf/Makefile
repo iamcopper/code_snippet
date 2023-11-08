@@ -1,4 +1,4 @@
-CROSS_COMPILE ?=
+#CROSS_COMPILE ?= aarch64-linux-gnu-
 CC := gcc
 ODIR := .build
 
@@ -24,9 +24,9 @@ client-obj += intf/rpc_intf.o
 client-obj += lib/log.o
 client-obj += lib/utils.o
 
-TARGET := server client
+OUT := server client
 
-all: $(TARGET)
+all: $(OUT)
 
 server: $(addprefix $(ODIR)/,$(server-obj))
 	$(CROSS_COMPILE)$(CC) $(CFLAGS) -o $@ $^
@@ -35,14 +35,13 @@ client: $(addprefix $(ODIR)/,$(client-obj))
 	$(CROSS_COMPILE)$(CC) $(CFLAGS) -o $@ $^
 
 $(ODIR)/%.o: %.c
-	@mkdir -p $(@D)
 	@echo ">>> $<"
+	@mkdir -p $(@D)
 	$(CROSS_COMPILE)$(CC) $(CFLAGS) -c $< -o $@
 
 include $(shell mkdir .dep 2>/dev/null) $(wildcard .dep/*)
 
 clean:
-	$(RM) -r $(ODIR) .dep
-	$(RM) $(TARGET)
+	$(RM) -r .dep $(ODIR) $(OUT)
 
 .PHONY: all clean

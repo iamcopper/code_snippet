@@ -1,7 +1,14 @@
+/**
+ * 注意
+ * 当前未测试，不可用
+ * 后续尝试用线程池
+ */
+
 #include <stdio.h>
 #include <unistd.h>
 #include <stdint.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -14,7 +21,7 @@
 
 void handle_request(int clientfd)
 {
-	int i = 0;
+	int i = 0, ret = 0;
 	int cycle = 0;
 	char buf[BUF_SIZE] = {0};
 
@@ -74,6 +81,9 @@ int main(int argc, char *argv[])
 	struct sockaddr_in clientaddr;
 	socklen_t clientlen;
 	int clientfd = 0;
+	pid_t pid, pids[PROCESS_NUM_MAX];
+	int pnum = 0;
+	int i = 0, wstatus;
 
 	while(1) {
 		clientfd = accept(sockfd, (struct sockaddr *)&clientaddr, &clientlen);
@@ -89,14 +99,13 @@ int main(int argc, char *argv[])
 		}
 
 		pid = fork();
-		if (pid = 0) {
+		if (pid == 0) {
 			/* Sub Process */
-			pnum++;
 			handle_request(clientfd);
 			close(clientfd);
-			pnum--;
 		} else if (pid > 0){
 			/* Main Process */
+			pids[pnum++] = pid;
 			continue;
 		} else {
 			perror("fork");
@@ -104,8 +113,8 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	for (i = 0; i < PROCESS_NUM_MAX; i++) {
-		waitpid(pids[i]);
+	for (i = 0; i < pnum; i++) {
+		waitpid(pids[i], &wstatus, 0);
 	}
 
 	close(sockfd);

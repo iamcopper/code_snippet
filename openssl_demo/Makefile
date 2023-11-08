@@ -16,9 +16,9 @@ encrypt_decrypt-obj += encrypt_decrypt.o
 encrypt-obj += encrypt.o
 decrypt-obj += decrypt.o
 
-TARGET := encrypt_decrypt encrypt decrypt
+OUT := encrypt_decrypt encrypt decrypt
 
-all: $(TARGET)
+all: $(OUT)
 
 encrypt_decrypt: $(addprefix $(ODIR)/,$(encrypt_decrypt-obj))
 	$(CROSS_COMPILE)$(CC) $(CFLAGS) -o $@ $^ $(LFLAGS)
@@ -30,17 +30,16 @@ decrypt: $(addprefix $(ODIR)/,$(decrypt-obj))
 	$(CROSS_COMPILE)$(CC) $(CFLAGS) -o $@ $^ $(LFLAGS)
 
 $(ODIR)/%.o: %.c
-	@mkdir -p $(@D)
 	@echo ">>> $<"
+	@mkdir -p $(@D)
 	$(CROSS_COMPILE)$(CC) $(CFLAGS) -c $< -o $@
 
 include $(shell mkdir .dep 2>/dev/null) $(wildcard .dep/*)
 
-distclean:clean
+distclean: clean
 	$(RM) rk_rsa* rk_erm*
 
 clean:
-	$(RM) -r $(ODIR) .dep
-	$(RM) $(TARGET)
+	$(RM) -r .dep $(ODIR) $(OUT)
 
 .PHONY: all clean distclean
