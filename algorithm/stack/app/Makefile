@@ -5,7 +5,8 @@ DEPDIR = .dep
 ODIR = .build
 
 EXTRAINCDIRS := ../seqstack
-VPATH = ../seqstack
+#VPATH = ../seqstack
+vpath seqstack.c ../seqstack
 #../../seqstack/setstack.o
 
 CFLAGS = -Wall -Werror -g

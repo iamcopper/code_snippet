@@ -5,7 +5,8 @@ DEPDIR = .dep
 ODIR = .build
 
 EXTRAINCDIRS := ../../bitree
-VPATH = ../../bitree
+#VPATH = ../../bitree
+vpath bitree.c ../../bitree
 #../../bitree/bitree.o
 
 CFLAGS = -Wall -Werror -g
