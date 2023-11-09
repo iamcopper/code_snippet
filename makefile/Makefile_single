@@ -1,26 +1,24 @@
-CROSS_COMPILE ?= aarch64-linux-gnu-
+#CROSS_COMPILE ?= aarch64-linux-gnu-
 CC := gcc
-CFLAGS := -Wall -g
+RM := -rm -f
+
+CFLAGS := -Wall -Werror -g
 LFLAGS :=
 
 OUT := $(shell basename $(shell pwd))
-#OUT := phytium_gpio
 
 OBJS := $(patsubst %.c,%.o,$(wildcard *.c))
-#OBJS += main.o
-#OBJS += phytium_gpio.o
-#OBJS += devmem.o
 
 all: $(OUT)
 
 $(OUT): $(OBJS)
-	$(CROSS_COMPILE)$(CC) $^ -o $@ $(LFLAGS)
+	$(CROSS_COMPILE)$(CC) $(LFLAGS) $^ -o $@
 
 %.o: %.c
 	@echo ">>> $<"
-	$(CROSS_COMPILE)$(CC) -c $< -o $@ $(CFLAGS)
+	$(CROSS_COMPILE)$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -rf *.o $(OBJS) $(OUT)
+	$(RM) *.o $(OUT)
 
 .PHONY: all clean

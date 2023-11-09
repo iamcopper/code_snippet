@@ -1,1 +1,1 @@
-../../makefile/Makefile_single
+../../makefile/Makefile_single_full

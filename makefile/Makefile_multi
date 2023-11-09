@@ -1,6 +1,8 @@
 #CROSS_COMPILE ?= aarch64-linux-gnu-
 CC := gcc
-CFLAGS := -Wall -g
+RM := -rm -f
+
+CFLAGS := -Wall -Werror -g
 LFLAGS :=
 
 OUT := $(patsubst %.c,%,$(wildcard *.c))
@@ -9,12 +11,13 @@ all: $(OUT)
 
 $(OUT): %: %.o
 	$(CROSS_COMPILE)$(CC) $^ -o $@ $(LFLAGS)
+	$(CROSS_COMPILE)$(CC) $(LFLAGS) $^ -o $@
 
 %.o: %.c
 	@echo ">>> $<"
-	$(CROSS_COMPILE)$(CC) -c $< -o $@ $(CFLAGS)
+	$(CROSS_COMPILE)$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -rf *.o $(OUT)
+	$(RM) *.o $(OUT)
 
 .PHONY: all clean

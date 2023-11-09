@@ -1,14 +1,14 @@
 #CROSS_COMPILE ?= aarch64-linux-gnu-
 CC := gcc
-ODIR := .build
+RM := -rm -f
+DEPDIR = .dep
+ODIR = .build
 
-CFLAGS := -Wall -g \
-		 -Werror
+EXTRAINCDIRS :=
 
-EXTRAINCDIRS +=
-
+CFLAGS = -Wall -Werror -g
+CFLAGS += -MMD -MP -MF .dep/$(@F).d
 CFLAGS += $(patsubst %,-I %,$(EXTRAINCDIRS))
-CFLAGS += -MD -MP -MF .dep/$(@F).d
 
 LFLAGS :=
 
@@ -17,16 +17,17 @@ OUT := $(patsubst %.c,%,$(wildcard *.c))
 all: $(OUT)
 
 $(OUT): %: $(addprefix $(ODIR)/,%.o)
-	$(CROSS_COMPILE)$(CC) $(CFLAGS) -o $@ $^
+	$(CROSS_COMPILE)$(CC) $(LFLAGS) $^ -o $@
 
 $(ODIR)/%.o: %.c
 	@echo ">>> $<"
 	@mkdir -p $(@D)
 	$(CROSS_COMPILE)$(CC) $(CFLAGS) -c $< -o $@
 
-include $(shell mkdir .dep 2>/dev/null) $(wildcard .dep/*)
+include $(shell mkdir $(DEPDIR) 2>/dev/null) $(wildcard $(DEPDIR)/*)
 
 clean:
-	$(RM) -r .dep $(ODIR) $(OUT)
+	$(RM) *.o
+	$(RM) -r $(DEPDIR) $(ODIR) $(OUT)
 
 .PHONY: all clean

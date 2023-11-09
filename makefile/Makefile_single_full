@@ -4,34 +4,21 @@ RM := -rm -f
 DEPDIR = .dep
 ODIR = .build
 
-
-EXTRAINCDIRS += intf lib
+EXTRAINCDIRS :=
 
 CFLAGS = -Wall -Werror -g
-CFLAGS += -MD -MP -MF .dep/$(@F).d
+CFLAGS += -MMD -MP -MF .dep/$(@F).d
 CFLAGS += $(patsubst %,-I %,$(EXTRAINCDIRS))
 
 LFLAGS :=
 
-common-obj := intf/rpc_intf.o
-common-obj += lib/log.o
-common-obj += lib/utils.o
+OUT := $(shell basename $(shell pwd))
 
-server-obj := src/server.o
-server-obj += src/rpc_cmd.o
-server-obj += $(common-obj)
-
-client-obj := src/client.o
-client-obj += $(common-obj)
-
-OUT := server client
+OBJS := $(patsubst %.c,%.o,$(wildcard *.c))
 
 all: $(OUT)
 
-server: $(addprefix $(ODIR)/,$(server-obj))
-	$(CROSS_COMPILE)$(CC) $(LFLAGS) $^ -o $@
-
-client: $(addprefix $(ODIR)/,$(client-obj))
+$(OUT): $(addprefix $(ODIR)/,$(OBJS))
 	$(CROSS_COMPILE)$(CC) $(LFLAGS) $^ -o $@
 
 $(ODIR)/%.o: %.c
