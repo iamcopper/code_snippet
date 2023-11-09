@@ -12,7 +12,7 @@ OBJS := $(patsubst %.c,%.o,$(wildcard *.c))
 all: $(OUT)
 
 $(OUT): $(OBJS)
-	$(CROSS_COMPILE)$(CC) $(LFLAGS) $^ -o $@
+	$(CROSS_COMPILE)$(CC) $^ -o $@ $(LFLAGS)
 
 %.o: %.c
 	@echo ">>> $<"

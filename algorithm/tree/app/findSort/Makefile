@@ -1,43 +1,38 @@
-CROSS_COMPILE ?=
+#CROSS_COMPILE ?= aarch64-linux-gnu-
 CC := gcc
-ODIR := .build
+RM := -rm -f
+DEPDIR = .dep
+ODIR = .build
 
-CFLAGS := -Wall \
-		 -Werror
+EXTRAINCDIRS := ../../bitree
+VPATH = ../../bitree
+#../../bitree/bitree.o
 
-EXTRAINCDIRS += ../../bitree
-
+CFLAGS = -Wall -Werror -g
+CFLAGS += -MMD -MP -MF .dep/$(@F).d
 CFLAGS += $(patsubst %,-I %,$(EXTRAINCDIRS))
-CFLAGS += -MD -MP -MF .dep/$(@F).d
 
 LFLAGS :=
 
-bitree-obj = bitree/bitree.o
+OUT := main
 
-main-obj += $(bitree-obj)
-main-obj += main.o
-
-OUT += main
+OBJS := main.o
+OBJS += bitree.o
 
 all: $(OUT)
 
-main: $(addprefix $(ODIR)/,$(main-obj))
-	$(CROSS_COMPILE)$(CC) $(CFLAGS) -o $@ $^
-
-$(ODIR)/$(bitree-obj): ../../bitree/bitree.c
-	@mkdir -p $(@D)
-	@echo ">>> $<"
-	$(CROSS_COMPILE)$(CC) $(CFLAGS) -c $< -o $@
+$(OUT): $(addprefix $(ODIR)/,$(OBJS))
+	$(CROSS_COMPILE)$(CC) $^ -o $@ $(LFLAGS)
 
 $(ODIR)/%.o: %.c
 	@mkdir -p $(@D)
 	@echo ">>> $<"
 	$(CROSS_COMPILE)$(CC) $(CFLAGS) -c $< -o $@
 
-include $(shell mkdir .dep 2>/dev/null) $(wildcard .dep/*)
+include $(shell mkdir $(DEPDIR) 2>/dev/null) $(wildcard $(DEPDIR)/*)
 
 clean:
-	$(RM) -r $(ODIR) .dep
-	$(RM) $(OUT)
+	$(RM) *.o
+	$(RM) -r $(DEPDIR) $(ODIR) $(OUT)
 
 .PHONY: all clean

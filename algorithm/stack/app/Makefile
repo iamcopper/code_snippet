@@ -1,64 +1,37 @@
-CROSS_COMPILE ?=
+#CROSS_COMPILE ?= aarch64-linux-gnu-
 CC := gcc
-ODIR := .build
+RM := -rm -f
+DEPDIR = .dep
+ODIR = .build
 
-CFLAGS := -Wall \
-		 -Werror
+EXTRAINCDIRS := ../seqstack
+VPATH = ../seqstack
+#../../seqstack/setstack.o
 
-EXTRAINCDIRS +=
-
+CFLAGS = -Wall -Werror -g
+CFLAGS += -MMD -MP -MF .dep/$(@F).d
 CFLAGS += $(patsubst %,-I %,$(EXTRAINCDIRS))
-CFLAGS += -MD -MP -MF .dep/$(@F).d
 
 LFLAGS :=
 
-stack-obj = seqstack/seqstack.o
+OUT := $(patsubst %.c,%,$(wildcard *.c))
 
-bracketMatch-obj += $(stack-obj)
-bracketMatch-obj += bracketMatch.o
-
-expressionConvert-obj += $(stack-obj)
-expressionConvert-obj += expressionConvert.o
-
-postfixExpression-obj += $(stack-obj)
-postfixExpression-obj += postfixExpression.o
-
-powerExpression-obj += $(stack-obj)
-powerExpression-obj += powerExpression.o
-
-OUT += bracketMatch
-OUT += expressionConvert
-OUT += postfixExpression
-OUT += powerExpression
+COMMON := seqstack.o
 
 all: $(OUT)
 
-bracketMatch: $(addprefix $(ODIR)/,$(bracketMatch-obj))
-	$(CROSS_COMPILE)$(CC) $(CFLAGS) -o $@ $^
-
-expressionConvert: $(addprefix $(ODIR)/,$(expressionConvert-obj))
-	$(CROSS_COMPILE)$(CC) $(CFLAGS) -o $@ $^
-
-postfixExpression: $(addprefix $(ODIR)/,$(postfixExpression-obj))
-	$(CROSS_COMPILE)$(CC) $(CFLAGS) -o $@ $^
-
-powerExpression: $(addprefix $(ODIR)/,$(powerExpression-obj))
-	$(CROSS_COMPILE)$(CC) $(CFLAGS) -o $@ $^
-
-$(ODIR)/$(stack-obj): ../seqstack/seqstack.c
-	@mkdir -p $(@D)
-	@echo ">>> $<"
-	$(CROSS_COMPILE)$(CC) $(CFLAGS) -c $< -o $@
+$(OUT): %: $(foreach var,%.o,$(addprefix $(ODIR)/,$(var)) $(addprefix $(ODIR)/,$(COMMON)))
+	$(CROSS_COMPILE)$(CC) $^ -o $@ $(LFLAGS)
 
 $(ODIR)/%.o: %.c
 	@mkdir -p $(@D)
 	@echo ">>> $<"
 	$(CROSS_COMPILE)$(CC) $(CFLAGS) -c $< -o $@
 
-include $(shell mkdir .dep 2>/dev/null) $(wildcard .dep/*)
+include $(shell mkdir $(DEPDIR) 2>/dev/null) $(wildcard $(DEPDIR)/*)
 
 clean:
-	$(RM) -r $(ODIR) .dep
-	$(RM) $(OUT)
+	$(RM) *.o
+	$(RM) -r $(DEPDIR) $(ODIR) $(OUT)
 
 .PHONY: all clean

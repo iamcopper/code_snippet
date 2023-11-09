@@ -17,7 +17,7 @@ OUT := $(patsubst %.c,%,$(wildcard *.c))
 all: $(OUT)
 
 $(OUT): %: $(addprefix $(ODIR)/,%.o)
-	$(CROSS_COMPILE)$(CC) $(LFLAGS) $^ -o $@
+	$(CROSS_COMPILE)$(CC) $^ -o $@ $(LFLAGS)
 
 $(ODIR)/%.o: %.c
 	@echo ">>> $<"
