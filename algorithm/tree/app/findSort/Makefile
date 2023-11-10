@@ -26,8 +26,8 @@ $(OUT): $(addprefix $(ODIR)/,$(OBJS))
 	$(CROSS_COMPILE)$(CC) $^ -o $@ $(LFLAGS)
 
 $(ODIR)/%.o: %.c
-	@mkdir -p $(@D)
 	@echo ">>> $<"
+	@mkdir -p $(@D)
 	$(CROSS_COMPILE)$(CC) $(CFLAGS) -c $< -o $@
 
 include $(shell mkdir $(DEPDIR) 2>/dev/null) $(wildcard $(DEPDIR)/*)
