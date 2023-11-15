@@ -25,6 +25,9 @@ modules modules_install clean help:
 
 else
 
+
+# hello1.o ---> mod1.ko
+# hello2.o ---> mod2.ko
 obj-m := mod1.o
 obj-m += mod2.o
 

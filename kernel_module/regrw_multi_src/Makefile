@@ -24,7 +24,7 @@ modules modules_install clean help:
 
 else
 
-# Final module name: regrw.ko
+# regrw1.o regrw2.o ---> regrw.ko
 obj-m   := regrw.o
 
 regrw-y += regrw1.o
