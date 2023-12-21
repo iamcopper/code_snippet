@@ -5,6 +5,8 @@ a.out
 
 # C
 *.o
+*.o.d
+*.o.cmd
 
 # Driver
 *.ko
