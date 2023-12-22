@@ -25,12 +25,16 @@ modules modules_install clean help:
 
 else
 
-# hello1.o ---> mod1.ko
-# hello2.o ---> mod2.ko
-obj-m := mod1.o
-obj-m += mod2.o
+# sample ref:
+# https://github.com/iamcopper/linux/blob/master/drivers/net/can/spi/Makefile
+# https://github.com/iamcopper/linux/blob/master/drivers/net/can/spi/mcp251xfd/Makefile
 
-mod1-y := hello1.o
-mod2-y := hello2.o
+# mod1.ko <--- hello1.o
+obj-m += mod1.o
+mod1-objs := hello1.o
+
+# mod2.ko <--- hello2.o
+obj-m += mod2.o
+mod2-objs := hello2.o
 
 endif

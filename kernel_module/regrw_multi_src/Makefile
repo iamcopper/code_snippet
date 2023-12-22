@@ -24,10 +24,14 @@ modules modules_install clean help:
 
 else
 
-# regrw1.o regrw2.o ---> regrw.ko
-obj-m   := regrw.o
+# sample ref:
+# https://github.com/iamcopper/linux/blob/master/drivers/net/can/spi/Makefile
+# https://github.com/iamcopper/linux/blob/master/drivers/net/can/spi/mcp251xfd/Makefile
 
-regrw-y += regrw1.o
-regrw-y += regrw2.o
+# regrw.ko <--- regrw1.o regrw2.o
+obj-m += regrw.o
+
+regrw-objs := regrw1.o
+regrw-objs += regrw2.o
 
 endif
