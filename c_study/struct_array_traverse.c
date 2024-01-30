@@ -1,5 +1,5 @@
 /*
- * Traverse Struct Array
+ * Traverse (Struct) Array
  * SampleCode: code_snippet/rpc_intf/src/rpc_cmd.c
  */
 #include <stdio.h>
