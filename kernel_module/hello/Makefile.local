@@ -27,4 +27,8 @@ else
 
 obj-m := hello.o
 
+# obj-m += mod.o
+# module-objs += mod_file1.o
+# module-objs += mod_file2.o
+
 endif
