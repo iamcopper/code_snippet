@@ -3,7 +3,7 @@
 #include <time.h>
 
 #define TIME_STR_FOMAT   "%Y%m%d %H:%M:%S"
-#define TIME_STR_SIZE    15
+#define TIME_STR_SIZE    20
 
 void mylog(FILE *stream, const char *fmt, ...)
 {
