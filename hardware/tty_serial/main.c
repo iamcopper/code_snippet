@@ -9,8 +9,23 @@
 #include <string.h>
 #include "tty_serial.h"
 
-#define TTY_SERIAL_DEV   "/dev/ttyTHS3"
-#define BUFSIZE          256
+#define BUFSIZE 256
+
+void usage(char *appname)
+{
+	printf("Usage: %s </dev/ttyXXX>\n\n", appname);
+}
+
+void show_data(char buf[], int len)
+{
+	int i = 0;
+	for(i = 0; i < len; i++) {
+		printf(" 0x%02x", buf[i]);
+		if ((i & 0xF) == 0xF)
+			printf("\n");
+	}
+	printf("\n");
+}
 
 int main(int argc, char *argv[])
 {
@@ -18,7 +33,12 @@ int main(int argc, char *argv[])
 	int ret = 0, i = 0;
 	char buf[BUFSIZE] = {0};
 
-	fd = open(TTY_SERIAL_DEV, O_RDWR);
+	if (argc < 2) {
+		usage(argv[0]);
+		return -1;
+	}
+
+	fd = open(argv[1], O_RDWR);
 	if(fd < 0) {
 		perror("open");
 		return -1;
@@ -37,11 +57,14 @@ int main(int argc, char *argv[])
 	buf[i++] = 0x02;
 	buf[i++] = 0x03;
 	buf[i++] = 0x04;
+
 	ret = write(fd, buf, i);
 	if (ret <  0) {
 		perror("write");
 		goto err;
 	}
+	printf(">>> %d bytes send.\n", ret);
+	show_data(buf, ret);
 
 	/* Receive Raw Data */
 	memset(buf, 0, sizeof(buf));
@@ -50,6 +73,8 @@ int main(int argc, char *argv[])
 		perror("read");
 		goto err;
 	}
+	printf("<<< %d bytes received.\n", ret);
+	show_data(buf, ret);
 
 err:
 	close(fd);
