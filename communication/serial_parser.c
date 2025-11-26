@@ -19,7 +19,7 @@
 typedef struct {
 	uint8_t header;     // 包头 (0xFF)
 	uint8_t command;    // 命令
-	uint16_t length;    // 数据长度
+	uint16_t length;    // 数据长度 (高字节在前)
 	uint8_t data[0];    // 可变长度数据
 } serial_packet_t;
 #pragma pack()
@@ -186,7 +186,7 @@ int parse_packet(packet_parser_t *parser, const uint8_t *data, uint16_t length) 
 		}
 
 		// 获取数据长度
-		uint16_t data_length = *(uint16_t*)(parser->buffer + 2);
+		uint16_t data_length = parser->buffer[2] << 8 | data[3];
 
 		// 检查是否收到完整数据包
 		uint16_t total_packet_length = 5 + data_length; // 包头1+命令1+长度2+数据N+校验1
