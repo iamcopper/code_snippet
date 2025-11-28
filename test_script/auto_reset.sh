@@ -4,18 +4,18 @@ echo -e "*********************************"
 echo -e "*          Auto Reset Test      *"
 echo -e "*********************************"
 
-HOST="192.168.2.53"
+HOST="192.168.3.20"
 USR="root"
 PWD="123"
-SLEEP="60"
+SLEEP="120"
 SSH_CMD="reboot"
 
-LOOP=$1
+LOOP=${1:-9999999999}
 TIMEOUT=3
 RETRY=5
 
 echo -e "HOST=${HOST}"
-echo -e "CMD=${CMD}"
+echo -e "SSH_CMD=${SSH_CMD}"
 echo -e "LOOP=${LOOP}\n"
 
 for (( i = 0; i < ${LOOP}; i++ )); do
