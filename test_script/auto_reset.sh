@@ -7,11 +7,10 @@ echo -e "*********************************"
 HOST="192.168.100.101"
 USR="root"
 PWD="123"
-SLEEP="60"
+SLEEP="90"
 SSH_CMD="reboot"
 
 LOOP=${1:-9999999999}
-TIMEOUT=3
 RETRY=3
 
 echo -e "HOST=${HOST}"
@@ -22,29 +21,39 @@ for (( i = 0; i < ${LOOP}; i++ )); do
 	echo -e "========== FOR LOOP $i =========="
 
 	let retry=1
-	CMD="timeout ${TIMEOUT} sshpass -p ${PWD} ssh -l ${USR} ${HOST} ${SSH_CMD}"
-	echo -e "${CMD}"
+	CMD="ping -c 3 ${HOST}"
+	echo -e "\n>>> ${CMD}"
 	${CMD}
 	ret=$?
-	while [[ ${ret} -eq 124 ]] && [[ ${retry} -le ${RETRY} ]];
+	while [[ ${ret} -ne 0 ]] && [[ ${retry} -le ${RETRY} ]];
 	do
-		sleep 1
-		echo -e "[INFO] ssh timeout, sleep 1s and retry=${retry}/${RETRY} ..."
+		sleep 3
+		echo -e "[ERROR] ping to host failed, retry=${retry}/${RETRY}"
 		let retry=${retry}+1
 		${CMD}
 		ret=$?
 	done
-	echo "ret=${ret}"
-	# ret=124 --- ssh timeout
-	if [[ ${ret} -eq 124 ]]; then
-		echo -e "[ERROR] ssh timeout, exit, i=${i}\n"
-		exit 1
-	# ret=0   --- command narmally exit
-	# ret=255 --- close by remote
-	elif [[ ${ret} -ne 0 ]] && [[ ${ret} -ne 255 ]]; then
-		echo -e "[ERROR] ssh command exec error, exit, i=${i}\n"
+	if [[ ${ret} -ne 0 ]]; then
+		echo -e "[ERROR] ping to host failed, exit.\n"
 		exit 1
 	fi
-	echo -e "Waiting ${SLEEP} seconds ... \n"
+
+	CMD="timeout 20 sshpass -p ${PWD} ssh -l ${USR} ${HOST} ${SSH_CMD}"
+	echo -e "\n>>> ${CMD}"
+	${CMD}
+	ret=$?
+	echo -e "ret=${ret}"
+	# ssh ret=0   --- command narmally exit
+	# ssh ret=124 --- ssh timeout
+	# ssh ret=255 --- close by remote, or network error
+	if [[ ${ret} -ne 0 ]] && [[ ${ret} -ne 255 ]]; then
+		if [[ ${ret} -eq 124 ]]; then
+			echo -e "[ERROR] ssh command timeout, exit.\n"
+		else
+			echo -e "[ERROR] ssh command error, exit.\n"
+		fi
+		exit 1
+	fi
+	echo -e "\n>>> sleep ${SLEEP} ...\n"
 	sleep ${SLEEP}
 done
